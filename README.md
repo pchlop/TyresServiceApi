@@ -1,66 +1,87 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## TyresFittingServiceApi
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Zadanie rekrutacyjne
+Api udostępnia endpointy, które pozwalają zarządzać serwisem wulkanizacji opon:
 
-## About Laravel
+W API powinny się znaleźć następujące funkcje:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Administracyjne
+- dodawanie nowego terminu **[<span style="color:yellow">POST</span>][/tyres-service]**
+- usuwanie terminu **[<span style="color:red">DELETE</span>][/tyres-service/{id}]**
+- wyświetlenie wszystkich terminów **[<span style="color:green">GET</span>][/tyres-service]**
+- wyświetlenie pojedynczego terminu **[<span style="color:green">GET</span>][/tyres-service/{id}]**
+- wyświetlenie zajętych terminów **[<span style="color:green">GET</span>][/tyres-service-busy]**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Użytkowe
+- wyświetl wolne terminy **[<span style="color:green">GET</span>][/tyres-service-free]**
+- zapisz się na wybrany termin **[<span style="color:white">PATCH</span>][/tyres-service/{id}]**
+- zapisz się na pierwszy wolny termin **[<span style="color:white">PATCH</span>][/tyres-service-first-free]**
+- zwolnij termin **[<span style="color:white">PATCH</span>][/tyres-service-cancel-visit]**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Korzystanie z API
 
-## Learning Laravel
+Endpointy oraz metody ich użycia przedstawiono powyżej. 
+Do wysłania zapytań *Administracyjnych* niezbędne jest wysłanie w nagłówku klucza autoryzacyjnego.
+Aby wysłać zapytania *Użytkowe* typu **<span style="color:white">PATCH</span>** należy podać w Body zapytania numer rejestracyjny pojazdu ('*registration_plate*'').
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### PRZYKŁADY
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+> **[<span style="color:yellow">POST</span>][/tyres-service]**
 
-## Laravel Sponsors
+`curl --location --request POST 'http://127.0.0.1:8000/api/tyres-service' \
+--header 'Accept: application/json' \
+--header 'Authorization: API_TOKEN \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'date=2021-11-23' \
+--data-urlencode 'time=12:05:00' \
+--data-urlencode '='`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+> **[<span style="color:red">DELETE</span>][/tyres-service/{id}]**
 
-### Premium Partners
+`curl --location --request DELETE 'http://127.0.0.1:8000/api/tyres-service/18' \
+--header 'Accept: application/json' \
+--header 'Authorization: Bearer API_TOKEN'`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
+>**[<span style="color:green">GET</span>][/tyres-service]**
 
-## Contributing
+`curl --location --request GET 'http://127.0.0.1:8000/api/tyres-service' \
+--header 'Accept: application/json' \
+--header 'Authorization: Bearer API_TOKEN'`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+>**[<span style="color:green">GET</span>][/tyres-service/{id}]**
 
-## Code of Conduct
+`curl --location --request GET 'http://127.0.0.1:8000/api/tyres-service/11' \
+--header 'Accept: application/json' \
+--header 'Authorization: Bearer API_TOKEN'`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+>**[<span style="color:green">GET</span>][/tyres-service-busy]**
 
-## Security Vulnerabilities
+`curl --location --request GET 'http://127.0.0.1:8000/api/tyres-service-busy' \
+--header 'Accept: application/json' \
+--header 'Authorization: Bearer API_TOKEN'`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+>**[<span style="color:green">GET</span>][/tyres-service-free]**
 
-## License
+`curl --location --request GET 'http://127.0.0.1:8000/api/tyres-service-free' \
+--header 'Accept: application/json'`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+>**[<span style="color:white">PATCH</span>][/tyres-service/{id}]**
+
+`curl --location --request PATCH 'http://127.0.0.1:8000/api/tyres-service/9' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'registration_plate=ABC11119'`
+
+>**[<span style="color:white">PATCH</span>][/tyres-service-first-free]**
+
+`curl --location --request PATCH 'http://127.0.0.1:8000/api/tyres-service-first-free' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'registration_plate=ABC11122'`
+
+>**[<span style="color:white">PATCH</span>][/tyres-service-cancel-visit]**
+
+`curl --location --request PATCH 'http://127.0.0.1:8000/api/tyres-service-cancel-visit' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'registration_plate=XYZ11114'`
