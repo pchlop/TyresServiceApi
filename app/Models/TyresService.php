@@ -36,7 +36,7 @@ class TyresService extends Model
         ]
     ];
 
-    public static function clientHasVisit($registration)
+    public static function clientHasNoVisit($registration)
     {
         $query = TyresService::where('date_of_service', '>', new DateTime('NOW'))->where('client', $registration)->get();
 

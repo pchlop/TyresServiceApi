@@ -18,7 +18,6 @@ class TyresServiceController extends Controller
      */
     public function index()
     {
-//        return TyresService::all();
         return TyresServiceResource::collection(TyresService::all());
     }
 
@@ -49,8 +48,6 @@ class TyresServiceController extends Controller
     public function show($id)
     {
         return new TyresServiceResource(TyresService::find($id));
-//        $tyresService = TyresService::find($id);
-//        return new TyresServicesResource($tyresService);
     }
     /**
      * Display the resource where client values is not null.
@@ -88,8 +85,8 @@ class TyresServiceController extends Controller
         $isFreeVisit = TyresService::where('id', $id)
                 ->where('date_of_service', '>', new DateTime('NOW'))
                 ->where('client')->get();
-        $hasVisit = TyresService::clientHasVisit($fields['registration_plate']);
-        if (!($isFreeVisit->isEmpty()) && !$hasVisit) {
+        $hasNoVisit = TyresService::clientHasNoVisit($fields['registration_plate']);
+        if (!($isFreeVisit->isEmpty()) && $hasNoVisit) {
             return TyresService::where('id', $id)
                 ->update(['client' => $fields['registration_plate']]);
         }
@@ -115,9 +112,9 @@ class TyresServiceController extends Controller
     public function bookFirst(Request $request)
     {
         $fields = $request->validate(TyresService::$updateRules);
-        $hasVisit = TyresService::clientHasVisit($fields['registration_plate']);
+        $hasNoVisit = TyresService::clientHasNoVisit($fields['registration_plate']);
 
-        if (!$hasVisit) {
+        if ($hasNoVisit) {
         return TyresService::whereNull('client')
             ->where('date_of_service', '>', new DateTime('NOW'))
             ->first()
